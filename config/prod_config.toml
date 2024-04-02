@@ -20,5 +20,5 @@ bucket = "tooaccouting"
 
 [logging]
 level = "DEBUG"
-render_json_logs = false
+render_json_logs = true
 #path = "./logs/logs.log"

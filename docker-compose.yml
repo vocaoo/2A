@@ -2,6 +2,7 @@ version: "3.9"
 
 services:
   api:
+    profiles: [ "api" ]
     container_name: service.api
     build:
       context: .
@@ -18,8 +19,8 @@ services:
     volumes:
       - ./config:/app/config:ro
     environment:
-      - CONFIG_PATH=${CONFIG_PATH:-./config/config.toml}
-    command: alembic upgrade head && python -Om src
+      - CONFIG_PATH=${CONFIG_PATH:-./config/prod_config.toml}
+    command: ["python", "-Om", "src"]
     healthcheck:
       test: ["CMD-SHELL", "curl -fsSL http://localhost:5000/healthcheck/"]
       interval: 10s
@@ -27,7 +28,27 @@ services:
       retries: 5
       start_period: 10s
 
+  postgres_migration:
+    profiles: [ "migration" ]
+    container_name: service.postgres_migration
+    build:
+      context: .
+    restart: on-failure
+    depends_on:
+      postgres:
+        condition: service_healthy
+    networks:
+      - service.postgres.network
+    volumes:
+      - ./config:/app/config:ro
+      - ./alembic.ini:/app/alembic.ini:ro
+      - ./src/infrastructure/db/migrations:/app/src/infrastructure/db/migrations:ro
+    environment:
+      - CONFIG_PATH=${CONFIG_PATH:-./config/prod_config.toml}
+    command: ["python", "-m", "alembic", "upgrade", "head"]
+
   postgres:
+    profiles: [ "api", "migration" ]
     container_name: service.postgres
     image: "postgres:15-alpine"
     hostname: service.postgres
@@ -50,7 +71,6 @@ services:
       timeout: 60s
       retries: 5
       start_period: 10s
-
 
 volumes:
   service.postgres.data: {}

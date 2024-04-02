@@ -30,6 +30,7 @@ FROM python-base AS production
 COPY --from=builder-base $PYSETUP_PATH $PYSETUP_PATH
 RUN apt-get update && apt-get install -y curl
 
-WORKDIR .
-COPY . .
+WORKDIR app/
+COPY ./src /app/src
+COPY alembic.ini /app
 CMD ["python", "-Om", "src"]
