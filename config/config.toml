@@ -1,0 +1,24 @@
+[api]
+host = "0.0.0.0"
+port = 5000
+debug = true
+
+[db]
+host = "service.postgres"
+port = 5432
+database = "test"
+user = "postgres"
+password = "2685118"
+echo = true
+
+[storage]
+access_key ="YCAJEzExiV55ARCpSq LAdhBW5"
+secret_key = "YCNbyHM9iHRMVA1k8mmfiLGp5KiCOeXaeyGAYGBL"
+endpoint_url = "https://storage.yandexcloud.net"
+region_name = "ru-central1"
+bucket = "tooaccouting"
+
+[logging]
+level = "DEBUG"
+render_json_logs = false
+#path = "./logs/logs.log"

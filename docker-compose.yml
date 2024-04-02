@@ -1,0 +1,59 @@
+version: "3.9"
+
+services:
+  api:
+    container_name: service.api
+    build:
+      context: .
+    restart: unless-stopped
+    expose:
+      - "5000"
+    ports:
+      - "5000:5000"
+    depends_on:
+      postgres:
+        condition: service_healthy
+    networks:
+      - service.postgres.network
+    volumes:
+      - ./config:/app/config:ro
+    environment:
+      - CONFIG_PATH=${CONFIG_PATH:-./config/config.toml}
+    command: alembic upgrade head && python -Om src
+    healthcheck:
+      test: ["CMD-SHELL", "curl -fsSL http://localhost:5000/healthcheck/"]
+      interval: 10s
+      timeout: 60s
+      retries: 5
+      start_period: 10s
+
+  postgres:
+    container_name: service.postgres
+    image: "postgres:15-alpine"
+    hostname: service.postgres
+    restart: unless-stopped
+    expose:
+      - "5432"
+    ports:
+      - "127.0.0.1:15432:5432"
+    networks:
+      - service.postgres.network
+    environment:
+      POSTGRES_PASSWORD: 2685118
+      POSTGRES_USER: postgres
+      POSTGRES_DB: test
+    volumes:
+      - service.postgres.data:/var/lib/postgresql/users:rw
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -d $${POSTGRES_DB} -U $${POSTGRES_USER}"]
+      interval: 10s
+      timeout: 60s
+      retries: 5
+      start_period: 10s
+
+
+volumes:
+  service.postgres.data: {}
+
+networks:
+  service.postgres.network: {}
