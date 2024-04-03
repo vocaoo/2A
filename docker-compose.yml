@@ -46,7 +46,7 @@ services:
     container_name: service.postgres_migration
     build:
       context: .
-    restart: on-failure
+    restart: no
     depends_on:
       postgres:
         condition: service_healthy
@@ -73,9 +73,9 @@ services:
     networks:
       - service.postgres.network
     environment:
-      POSTGRES_PASSWORD: 2685118
-      POSTGRES_USER: postgres
-      POSTGRES_DB: test
+      POSTGRES_PASSWORD: a5W-ZKX-tSfa1I11j0VM
+      POSTGRES_USER: 2A_user
+      POSTGRES_DB: 2A_database
     volumes:
       - service.postgres.data:/var/lib/postgresql/users:rw
     healthcheck:

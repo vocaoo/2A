@@ -6,9 +6,9 @@ debug = true
 [db]
 host = "service.postgres"
 port = 5432
-database = "test"
-user = "postgres"
-password = "2685118"
+database = "2A_database"
+user = "2A_user"
+password = "a5W-ZKX-tSfa1I11j0VM"
 echo = true
 
 [storage]
@@ -16,7 +16,7 @@ access_key ="YCAJEzExiV55ARCpSq LAdhBW5"
 secret_key = "YCNbyHM9iHRMVA1k8mmfiLGp5KiCOeXaeyGAYGBL"
 endpoint_url = "https://storage.yandexcloud.net"
 region_name = "ru-central1"
-bucket = "tooaccouting"
+bucket = "2aobjectstorage"
 
 [logging]
 level = "DEBUG"
