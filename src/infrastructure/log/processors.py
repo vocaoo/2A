@@ -22,7 +22,7 @@ def additionally_serialize(obj: Any) -> Any:
 
 
 def serialize_to_json(data: Any) -> str:
-    return orjson.dumps(data, default=additionally_serialize).decode()
+    return orjson.dumps(data).decode()
 
 
 def get_render_processor(

@@ -1,6 +1,18 @@
 version: "3.9"
 
 services:
+  web:
+    container_name: "web"
+    image: nginx:alpine
+    depends_on:
+      - api
+    ports:
+      - "8082:80"
+    volumes:
+      - ./config:/etc/nginx/conf.d
+    networks:
+      - custom
+
   api:
     profiles: [ "api" ]
     container_name: service.api
@@ -16,6 +28,7 @@ services:
         condition: service_healthy
     networks:
       - service.postgres.network
+      - custom
     volumes:
       - ./config:/app/config:ro
     environment:
@@ -77,3 +90,5 @@ volumes:
 
 networks:
   service.postgres.network: {}
+  custom:
+    driver: bridge
