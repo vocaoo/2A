@@ -12,3 +12,10 @@ origins = ["*"]
 def setup_middlewares(app: FastAPI) -> None:
     app.add_middleware(BaseHTTPMiddleware, dispatch=structlog_bind_middleware)
     app.add_middleware(BaseHTTPMiddleware, dispatch=set_request_id_middleware)
+    app.add_middleware(
+        CORSMiddleware,
+        allow_origins=['*'],
+        allow_credentials=True,
+        allow_methods=["*"],
+        allow_headers=["*"],
+    )
