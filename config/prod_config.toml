@@ -12,7 +12,7 @@ password = "a5W-ZKX-tSfa1I11j0VM"
 echo = true
 
 [storage]
-access_key ="YCAJEzExiV55ARCpSq LAdhBW5"
+access_key ="YCAJEzExiV55ARCpSqLAdhBW5"
 secret_key = "YCNbyHM9iHRMVA1k8mmfiLGp5KiCOeXaeyGAYGBL"
 endpoint_url = "https://storage.yandexcloud.net"
 region_name = "ru-central1"
