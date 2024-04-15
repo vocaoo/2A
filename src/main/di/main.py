@@ -20,7 +20,7 @@ from src.infrastructure.database.main import (
 )
 from src.infrastructure.database.repositories.task import TaskReaderImpl, TaskRepoImpl
 from src.infrastructure.database.repositories.user import UserRepoImpl, UserReaderImpl
-from src.infrastructure.aws import YandexStorageService
+from src.infrastructure.aws import FirebaseObjectStorage
 from src.infrastructure.uow import build_uow
 from src.infrastructure.metadata import PhotoMetadata
 from src.main.di import DiScope
@@ -103,7 +103,7 @@ def setup_db_factories(di_builder: DiBuilder) -> None:
 def setup_aws_factories(di_builder: DiBuilder) -> None:
     di_builder.bind(
         bind_by_type(
-            Dependent(YandexStorageService, scope=DiScope.REQUEST), ObjectStorage, covariant=True
+            Dependent(FirebaseObjectStorage, scope=DiScope.REQUEST), ObjectStorage, covariant=True
         )
     )
 
