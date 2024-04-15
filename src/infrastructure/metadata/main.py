@@ -1,3 +1,5 @@
+from io import BytesIO
+
 from PIL import Image
 from PIL.ExifTags import TAGS
 
@@ -9,12 +11,13 @@ class PhotoMetadata(PhotoMetadataProcessor):
     @staticmethod
     def _get_exif_data(photo: bytes):
         exif_data = {}
-        with Image.open(photo) as img:
-            exif = img._getexif()
-            if exif:
-                for tag, value in exif.items():
-                    tag_name = TAGS.get(tag, tag)
-                    exif_data[tag_name] = value
+        with BytesIO(photo) as img_buf:
+            with Image.open(img_buf) as img:
+                exif = img._getexif()
+                if exif:
+                    for tag, value in exif.items():
+                        tag_name = TAGS.get(tag, tag)
+                        exif_data[tag_name] = value
         return exif_data
 
     def get_coordinates(self, photo: bytes) -> Coordinates:

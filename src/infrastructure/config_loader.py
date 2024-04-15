@@ -5,7 +5,7 @@ from typing import TypeVar
 from adaptix import Retort
 
 T = TypeVar("T")
-DEFAULT_CONFIG_PATH = "./config/config.toml"
+DEFAULT_CONFIG_PATH = "../config/config.toml"
 
 
 def read_toml(path: str) -> dict:

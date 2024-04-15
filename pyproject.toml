@@ -22,6 +22,7 @@ di = "^0.79.2"
 fastapi = "^0.110.0"
 uvicorn = "^0.29.0"
 exifread = "^3.0.0"
+requests = "^2.31.0"
 
 
 [build-system]

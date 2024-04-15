@@ -34,6 +34,7 @@ class YandexStorageService(ObjectStorage):
 class FirebaseObjectStorage(ObjectStorage):
     def get(self, name: str) -> bytes:
         response = requests.get(name)
+        print(response.content)
         if response.status_code == 200:
             return response.content
         return ValueError("Photo can't be download")
