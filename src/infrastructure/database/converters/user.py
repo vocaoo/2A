@@ -19,7 +19,7 @@ def convert_user_entity_to_db_model(user: entities.User) -> models.User:
         department=user.department.to_raw(),
         role=user.role.to_raw(),
         photo_url=user.photo_url.to_raw(),
-        password=user.photo_url.to_raw(),
+        password=user.password.to_raw(),
         deleted_at=user.deleted_at.to_raw(),
     )
 
