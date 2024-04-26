@@ -18,9 +18,9 @@ class Task(TimedBaseModel):
     code: Mapped[str]
     name: Mapped[str | None]
     address: Mapped[str]
-    current_indication: Mapped[float]
+    current_indication: Mapped[float | None]
     previous_indication: Mapped[float | None] = mapped_column(default=None)
-    implementer: Mapped[str]
+    implementer: Mapped[str | None]
     latitude: Mapped[float | None] = mapped_column(default=None)
     longitude: Mapped[float | None] = mapped_column(default=None)
     comment: Mapped[str | None] = mapped_column(default=None)

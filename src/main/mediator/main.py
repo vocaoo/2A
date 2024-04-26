@@ -48,7 +48,9 @@ from src.application.task.queries import (
     GetTaskByCode,
     GetTaskByCodeHandler,
     GetTaskByID,
-    GetTaskByIDHandler
+    GetTaskByIDHandler,
+    GetFile,
+    GetFileHandler,
 )
 from src.application.task.commands import (
     CreateTask,
@@ -63,6 +65,10 @@ from src.application.task.commands import (
     DelayTaskHandler,
     DeleteTask,
     DeleteTaskHandler,
+    ClearDatabase,
+    ClearDatabaseHandler,
+    UploadFile,
+    UploadFileHandler,
 )
 
 
@@ -90,6 +96,8 @@ def setup_mediator(mediator: Mediator) -> None:
     mediator.register_command_handler(SetPhotoURL, SetPhotoURLHandler)
     mediator.register_command_handler(DeleteDepartment, DeleteDepartmentHandler)
     mediator.register_command_handler(DeletePhotoURL, DeletePhotoURLHandler)
+    mediator.register_command_handler(UploadFile, UploadFileHandler)
+    mediator.register_command_handler(ClearDatabase, ClearDatabaseHandler)
 
     mediator.register_command_handler(CreateTask, CreateTaskHandler)
     mediator.register_command_handler(CheckTask, CheckTaskHandler)
@@ -101,6 +109,7 @@ def setup_mediator(mediator: Mediator) -> None:
     mediator.register_query_handler(GetUserById, GetUserByIdHandler)
     mediator.register_query_handler(GetUserByUsername, GetUserByUsernameHandler)
     mediator.register_query_handler(GetUsers, GetUsersHandler)
+    mediator.register_query_handler(GetFile, GetFileHandler)
 
     mediator.register_query_handler(GetTaskByID, GetTaskByIDHandler)
     mediator.register_query_handler(GetTaskByCode, GetTaskByCodeHandler)

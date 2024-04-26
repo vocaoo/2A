@@ -9,6 +9,7 @@ class StatusState(Enum):
     CHECKING = "Проверяется"
     COMPLETED = "Выполнено"
     OVERDUE = "Просрочено"
+    DELETED = "Удалено"
 
 
 @dataclass(frozen=True)

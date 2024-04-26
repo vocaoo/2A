@@ -142,6 +142,7 @@ class Task(AggregateRoot):
 
     def delete_task(self) -> None:
         self._validate_not_deleted()
+        self.status = StatusState.DELETED
 
         self.deleted_at.create_deleted()
         self.record_event(

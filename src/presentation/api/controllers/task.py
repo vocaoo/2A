@@ -2,7 +2,8 @@ from typing import Annotated
 from uuid import UUID
 
 from didiator import CommandMediator, Mediator, QueryMediator
-from fastapi import APIRouter, Depends, Query, status
+from fastapi import APIRouter, Depends, Query, status, File, UploadFile as FUploadFile
+from fastapi.responses import FileResponse, Response
 
 from src.application.common.pagination.dto import Pagination, SortOrder
 from src.application.task import dto
@@ -13,9 +14,11 @@ from src.application.task.commands import (
     DelayTask,
     DeleteTask,
     RejectTask,
+    UploadFile,
+    ClearDatabase
 )
 from src.application.task.interfaces.persistence import GetTaskFilters
-from src.application.task.queries import GetTaskByID, GetTaskByCode, GetTasks
+from src.application.task.queries import GetTaskByID, GetTaskByCode, GetTasks, GetFile
 from src.domain.common.const import Empty
 from src.presentation.api.controllers.responses.base import OkResponse
 from src.presentation.api.providers.stub import Stub
@@ -75,7 +78,7 @@ async def get_tasks(
     order: SortOrder = SortOrder.ASC,
     condition: StatusState = StatusState.EXECUTING,
 ) -> OkResponse[dto.Tasks]:
-    users = await mediator.query(
+    tasks = await mediator.query(
         GetTasks(
             filters=GetTaskFilters(deleted if deleted is not None else Empty.UNSET),
             pagination=Pagination(
@@ -86,7 +89,7 @@ async def get_tasks(
             status=condition,
         )
     )
-    return OkResponse(result=users)
+    return OkResponse(result=tasks)
 
 
 @task_router.put("/{task_id}/complete")
@@ -140,3 +143,53 @@ async def delete_task(
 ) -> OkResponse[None]:
     await mediator.send(DeleteTask(task_id=task_id))
     return OkResponse()
+
+
+@task_router.post("/upload")
+async def upload_task(
+    mediator: Annotated[CommandMediator, Depends(Stub(CommandMediator))],
+    file: FUploadFile = File(),
+) -> OkResponse[None]:
+    await mediator.send(UploadFile(file=file.file))
+    return OkResponse()
+
+
+@task_router.delete("/clear")
+async def clear_database(
+    mediator: Annotated[CommandMediator, Depends(Stub(CommandMediator))],
+) -> OkResponse[None]:
+    await mediator.send(ClearDatabase())
+    return OkResponse()
+
+
+@task_router.post("/download")
+async def download(
+    mediator: Annotated[QueryMediator, Depends(Stub(QueryMediator))],
+    deleted: bool | None = None,
+    offset: Annotated[int, Query(ge=0)] = 0,
+    limit: Annotated[int, Query(ge=0, le=1000)] = 1000,
+    order: SortOrder = SortOrder.ASC,
+    condition: StatusState = StatusState.CHECKING,
+) -> FileResponse:
+    file = await mediator.query(
+        GetFile(
+            filters=GetTaskFilters(deleted if deleted is not None else Empty.UNSET),
+            pagination=Pagination(
+                offset=offset,
+                limit=limit,
+                order=order,
+            ),
+            status=condition,
+        )
+    )
+    headers = {
+        'Content-Disposition': 'attachment; filename="Report.xlsx"',
+        "Access-Control-Allow-Origin": "*",
+        "Access-Control-Allow-Headers": "*",
+        "Access-Control_Allow-Methods": "POST, GET, OPTIONS",
+    }
+    return Response(
+        content=file.getvalue(),
+        media_type="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=utf-8",
+        headers=headers
+    )

@@ -107,3 +107,8 @@ class TaskRepoImpl(SQLAlchemyRepo, TaskRepo):
     async def update_task(self, task: Task) -> None:
         db_user = convert_task_entity_to_db_model(task)
         await self._session.merge(db_user)
+
+    async def get_tasks_uuid(self) -> list[UUID]:
+        query = select(Task.task_id)
+        result = await self._session.execute(query)
+        return [task_id[0] for task_id in result.fetchall()]

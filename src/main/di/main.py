@@ -25,6 +25,8 @@ from src.infrastructure.uow import build_uow
 from src.infrastructure.metadata import PhotoMetadata
 from src.main.di import DiScope
 from src.main.mediator import get_mediator
+from src.application.task.interfaces.excel import ExcelProcessor
+from src.infrastructure.excel.main import OpenpyxlProcessor
 
 
 def init_di_builder() -> DiBuilder:
@@ -46,6 +48,7 @@ def setup_di_builder(di_builder: DiBuilder) -> None:
     setup_db_factories(di_builder)
     setup_aws_factories(di_builder)
     setup_photo_metadata_factories(di_builder)
+    setup_excel_factories(di_builder)
 
 
 def setup_mediator_factory(
@@ -112,5 +115,13 @@ def setup_photo_metadata_factories(di_builder: DiBuilder) -> None:
     di_builder.bind(
         bind_by_type(
             Dependent(PhotoMetadata, scope=DiScope.REQUEST), PhotoMetadataProcessor, covariant=True
+        )
+    )
+
+
+def setup_excel_factories(di_builder: DiBuilder) -> None:
+    di_builder.bind(
+        bind_by_type(
+            Dependent(OpenpyxlProcessor, scope=DiScope.REQUEST), ExcelProcessor, covariant=True
         )
     )
