@@ -15,4 +15,5 @@ class TaskCompleted(Event):
     current_indication: float
     previous_indication: float
     status: str
+    comment: str | None
     completion_date: datetime

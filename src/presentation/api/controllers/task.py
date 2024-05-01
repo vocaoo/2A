@@ -103,7 +103,8 @@ async def complete_task(
         near_photo_url=data.near_photo_url,
         far_photo_url=data.far_photo_url,
         current_indication=data.current_indication,
-        previous_indication=data.previous_indication
+        previous_indication=data.previous_indication,
+        comment=data.comment,
     )
     await mediator.send(command)
     return OkResponse()

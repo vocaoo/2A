@@ -10,7 +10,7 @@ from src.application.task.interfaces.persistence import TaskRepo
 from src.application.common.interfaces import UnitOfWork
 from src.application.task.interfaces.object_storage import ObjectStorage
 from src.application.task.interfaces.metadata import PhotoMetadataProcessor
-from src.domain.task.value_objects import TaskID, PhotoURL, Indication
+from src.domain.task.value_objects import TaskID, PhotoURL, Indication, Comment
 
 
 logger = logging.getLogger(__name__)
@@ -23,6 +23,7 @@ class CompleteTask(Command[None]):
     far_photo_url: str
     previous_indication: float
     current_indication: float
+    comment: str | None
 
 
 class CompleteTaskHandler(CommandHandler[CompleteTask, None]):
@@ -44,12 +45,13 @@ class CompleteTaskHandler(CommandHandler[CompleteTask, None]):
         task_id = TaskID(command.task_id)
         photo_url = PhotoURL(command.near_photo_url, command.far_photo_url)
         indication = Indication(command.current_indication, command.previous_indication)
+        comment = Comment(command.comment)
 
         photo = self._object_storage.get(command.near_photo_url)
         coordinates = self._metadate_processor.get_coordinates(photo)
 
         task = await self._task_repo.acquire_task_by_id(task_id)
-        task.complete_task(photo_url, indication, coordinates)
+        task.complete_task(photo_url, indication, coordinates, comment)
 
         await self._task_repo.update_task(task)
         await self._mediator.publish(task.pull_events())

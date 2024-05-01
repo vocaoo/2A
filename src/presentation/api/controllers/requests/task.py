@@ -6,3 +6,4 @@ class CompleteTaskData(BaseModel):
     far_photo_url: str
     previous_indication: float
     current_indication: float
+    comment: str | None

@@ -83,12 +83,14 @@ class Task(AggregateRoot):
         photo_url: PhotoURL,
         indication: Indication,
         coordinates: Coordinates,
+        comment: Comment,
     ) -> None:
         self._validate_not_deleted()
 
         self.photo_url = photo_url
         self.coordinates = coordinates
         self.indication = indication
+        self.comment = comment
         self.status = StatusState.CHECKING
         self.completion_date = CompletionDate(datetime.utcnow())
         self.record_event(
@@ -101,6 +103,7 @@ class Task(AggregateRoot):
                 current_indication=self.indication.current,
                 previous_indication=self.indication.previous,
                 status=self.status,
+                comment=self.comment.to_raw(),
                 completion_date=self.completion_date.to_raw(),
             )
         )

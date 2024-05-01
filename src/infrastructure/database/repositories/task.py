@@ -63,10 +63,10 @@ class TaskReaderImpl(SQLAlchemyRepo, TaskReader):
 
         query = query.where(Task.status == status)
 
-        if pagination.offset is not Empty.UNSET:
-            query = query.offset(pagination.offset)
-        if pagination.limit is not Empty.UNSET:
-            query = query.limit(pagination.limit)
+        # if pagination.offset is not Empty.UNSET:
+        #     query = query.offset(pagination.offset)
+        # if pagination.limit is not Empty.UNSET:
+        #     query = query.limit(pagination.limit)
 
         result: Iterable[Task] = await self._session.scalars(query)
         tasks = [convert_db_model_to_task_dto(task) for task in result]
