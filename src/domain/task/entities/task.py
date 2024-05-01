@@ -19,6 +19,7 @@ from src.domain.task.value_objects import (
     Status,
     StatusState,
     DeletionTime,
+    Number,
 )
 
 
@@ -31,6 +32,7 @@ class Task(AggregateRoot):
     indication: Indication
     implementer: Implementer
     coordinates: Coordinates
+    number: Number
     comment: Comment
     status: Status = field(default=StatusState.EXECUTING)
     photo_url: PhotoURL = field(default=PhotoURL(None, None))
@@ -49,7 +51,8 @@ class Task(AggregateRoot):
         indication: Indication,
         implementer: Implementer,
         coordinates: Coordinates,
-        comment: Comment
+        comment: Comment,
+        number: Number
     ) -> Self:
         task = cls(
             task_id=task_id,
@@ -59,7 +62,8 @@ class Task(AggregateRoot):
             indication=indication,
             implementer=implementer,
             coordinates=coordinates,
-            comment=comment
+            comment=comment,
+            number=number
         )
         task.record_event(
             TaskCreated(
@@ -73,6 +77,7 @@ class Task(AggregateRoot):
                 current_indication=indication.current,
                 previous_indication=indication.previous,
                 status=task.status,
+                number=number.to_raw(),
             )
         )
 

@@ -23,6 +23,7 @@ def convert_task_entity_to_db_model(task: TaskEntity) -> TaskModel:
         status=task.status,
         near_photo_url=task.photo_url.near,
         far_photo_url=task.photo_url.far,
+        number=task.number.to_raw(),
         completion_date=task.completion_date.to_raw(),
         deleted_at=task.deleted_at.to_raw(),
     )
@@ -45,6 +46,7 @@ def convert_db_model_to_task_entity(task: TaskModel) -> TaskEntity:
         photo_url=photos,
         completion_date=vo.CompletionDate(task.completion_date),
         deleted_at=vo.DeletionTime(task.deleted_at),
+        number=vo.Number(task.number),
     )
 
 
@@ -67,6 +69,7 @@ def convert_db_model_to_active_task_dto(task: TaskModel) -> dto.Task:
         near_photo_url=task.near_photo_url,
         far_photo_url=task.far_photo_url,
         completion_date=task.completion_date,
+        number=task.number
     )
 
 
@@ -85,6 +88,7 @@ def convert_db_model_to_deleted_task_dto(task: TaskModel) -> dto.DeletedTask:
         status=task.status,
         near_photo_url=task.near_photo_url,
         far_photo_url=task.far_photo_url,
+        number=task.number,
         completion_date=task.completion_date,
         deleted_at=cast(datetime, task.deleted_at)
     )

@@ -27,5 +27,6 @@ class Task(TimedBaseModel):
     status: Mapped[StatusState]
     near_photo_url: Mapped[str | None] = mapped_column(default=None)
     far_photo_url: Mapped[str | None] = mapped_column(default=None)
+    number: Mapped[str | None] = mapped_column(default=None)
     completion_date: Mapped[datetime | None] = mapped_column(default=None)
     deleted_at: Mapped[datetime | None] = mapped_column(default=None)

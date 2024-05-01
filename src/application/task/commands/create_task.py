@@ -17,6 +17,7 @@ from src.domain.task.value_objects import (
     Coordinates,
     Implementer,
     Comment,
+    Number,
 )
 
 
@@ -34,6 +35,7 @@ class CreateTask(Command[UUID]):
     latitude: float | None
     longitude: float | None
     comment: str | None
+    number: str | None
 
 
 class CreateTaskHandler(CommandHandler[CreateTask, TaskID]):
@@ -51,6 +53,7 @@ class CreateTaskHandler(CommandHandler[CreateTask, TaskID]):
         implementer = Implementer(command.implementer)
         coordinates = Coordinates(latitude=command.latitude, longitude=command.longitude)
         comment = Comment(command.comment)
+        number = Number(command.number)
 
         task = Task.create_task(
             task_id=task_id,
@@ -60,7 +63,8 @@ class CreateTaskHandler(CommandHandler[CreateTask, TaskID]):
             indication=indication,
             implementer=implementer,
             coordinates=coordinates,
-            comment=comment
+            comment=comment,
+            number=number,
         )
 
         await self._task_repo.add_task(task)

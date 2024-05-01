@@ -5,7 +5,17 @@ from openpyxl import Workbook, load_workbook
 from src.application.task.interfaces.excel import ExcelProcessor
 from src.domain.task.entities import Task
 
-from src.domain.task.value_objects import TaskID, Code, Name, Address, Indication, Implementer, Coordinates, Comment
+from src.domain.task.value_objects import (
+    TaskID,
+    Code,
+    Name,
+    Address,
+    Indication,
+    Implementer,
+    Coordinates,
+    Comment,
+    Number,
+)
 
 from .utils import draw_report_header
 
@@ -18,11 +28,10 @@ class OpenpyxlProcessor(ExcelProcessor):
         for task in tasks:
             worksheet.append(
                 (
-                    task.code, task.address, task.name,
-                    None, None, task.previous_indication,
-                    task.current_indication, task.completion_date,
-                    task.longitude, task.latitude, task.near_photo_url,
-                    task.far_photo_url
+                    task.code, task.address, task.name, None,
+                    task.number, task.previous_indication, task.current_indication,
+                    task.completion_date, task.longitude, task.latitude,
+                    task.near_photo_url, task.far_photo_url
                 )
             )
         buffer = BytesIO()
@@ -48,7 +57,7 @@ class OpenpyxlProcessor(ExcelProcessor):
                     latitude=worksheet.cell(row=row, column=10).value
                 ),
                 comment=Comment(None),
+                number=Number(worksheet.cell(row=row, column=5).value),
             )
             for row in range(3, worksheet.max_row + 1)
         ]
-

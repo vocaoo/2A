@@ -10,6 +10,7 @@ from .name import Name
 from .photo_url import PhotoURL
 from .status import Status, StatusState
 from .task_id import TaskID
+from .number import Number
 
 
 __all__ = (
@@ -25,5 +26,6 @@ __all__ = (
     "PhotoURL",
     "Status",
     "StatusState",
+    "Number",
     "TaskID",
 )

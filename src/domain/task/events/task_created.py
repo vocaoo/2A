@@ -15,4 +15,5 @@ class TaskCreated(Event):
     implementer: str | None
     current_indication: float
     previous_indication: float | None
+    number: str
     status: str

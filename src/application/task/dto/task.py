@@ -20,5 +20,6 @@ class Task(DTO):
     status: str
     near_photo_url: str
     far_photo_url: str
+    number: str | None
     completion_date: datetime
     deleted_at: None = field(default=None, init=False)

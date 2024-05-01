@@ -1,8 +1,8 @@
-"""main
+"""initial
 
-Revision ID: 34e463c78bb7
+Revision ID: f211345785cd
 Revises: 
-Create Date: 2024-04-26 14:44:28.883236
+Create Date: 2024-05-01 22:14:48.740864
 
 """
 from typing import Sequence, Union
@@ -12,7 +12,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision: str = '34e463c78bb7'
+revision: str = 'f211345785cd'
 down_revision: Union[str, None] = None
 branch_labels: Union[str, Sequence[str], None] = None
 depends_on: Union[str, Sequence[str], None] = None
@@ -25,15 +25,16 @@ def upgrade() -> None:
     sa.Column('code', sa.String(), nullable=False),
     sa.Column('name', sa.String(), nullable=True),
     sa.Column('address', sa.String(), nullable=False),
-    sa.Column('current_indication', sa.Float(), nullable=False),
+    sa.Column('current_indication', sa.Float(), nullable=True),
     sa.Column('previous_indication', sa.Float(), nullable=True),
-    sa.Column('implementer', sa.String(), nullable=False),
+    sa.Column('implementer', sa.String(), nullable=True),
     sa.Column('latitude', sa.Float(), nullable=True),
     sa.Column('longitude', sa.Float(), nullable=True),
     sa.Column('comment', sa.String(), nullable=True),
     sa.Column('status', sa.Enum('EXECUTING', 'CHECKING', 'COMPLETED', 'OVERDUE', 'DELETED', name='statusstate'), nullable=False),
     sa.Column('near_photo_url', sa.String(), nullable=True),
     sa.Column('far_photo_url', sa.String(), nullable=True),
+    sa.Column('number', sa.String(), nullable=True),
     sa.Column('completion_date', sa.DateTime(), nullable=True),
     sa.Column('deleted_at', sa.DateTime(), nullable=True),
     sa.Column('created_at', sa.DateTime(), server_default=sa.text('now()'), nullable=False),
