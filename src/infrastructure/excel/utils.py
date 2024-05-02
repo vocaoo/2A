@@ -42,8 +42,8 @@ def draw_second_line_report_header(worksheet: Worksheet) -> None:
     worksheet.cell(row=2, column=5).value = "Номер ПУ"
     worksheet.cell(row=2, column=6).value = "Предыдущие показания"
     worksheet.cell(row=2, column=7).value = "Текущие показания"
-    worksheet.cell(row=2, column=9).value = "Широта"
-    worksheet.cell(row=2, column=10).value = "Долгота"
+    worksheet.cell(row=2, column=9).value = "Долгота"
+    worksheet.cell(row=2, column=10).value = "Широта"
     worksheet.cell(row=2, column=11).value = "Показания"
     worksheet.cell(row=2, column=12).value = "Счетчик"
 

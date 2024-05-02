@@ -30,7 +30,7 @@ class OpenpyxlProcessor(ExcelProcessor):
                 (
                     task.code, task.address, task.name, None,
                     task.number, task.previous_indication, task.current_indication,
-                    task.completion_date, task.longitude, task.latitude,
+                    task.completion_date, task.latitude, task.longitude,
                     task.near_photo_url, task.far_photo_url
                 )
             )
@@ -53,8 +53,8 @@ class OpenpyxlProcessor(ExcelProcessor):
                 ),
                 implementer=Implementer(None),
                 coordinates=Coordinates(
-                    longitude=worksheet.cell(row=row, column=9).value,
-                    latitude=worksheet.cell(row=row, column=10).value
+                    longitude=worksheet.cell(row=row, column=10).value,
+                    latitude=worksheet.cell(row=row, column=9).value
                 ),
                 comment=Comment(None),
                 number=Number(worksheet.cell(row=row, column=5).value),

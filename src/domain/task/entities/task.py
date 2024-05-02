@@ -97,7 +97,7 @@ class Task(AggregateRoot):
         self.indication = indication
         self.comment = comment
         self.status = StatusState.CHECKING
-        self.completion_date = CompletionDate(datetime.utcnow())
+        self.completion_date = CompletionDate(datetime.now())
         self.record_event(
             TaskCompleted(
                 task_id=self.task_id.to_raw(),
