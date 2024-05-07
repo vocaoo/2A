@@ -44,9 +44,18 @@ class OpenpyxlProcessor(ExcelProcessor):
         return [
             Task.create_task(
                 task_id=TaskID(uuid7()),
-                code=Code(worksheet.cell(row=row, column=1).value),
-                name=Name(worksheet.cell(row=row, column=3).value),
-                address=Address(worksheet.cell(row=row, column=2).value),
+                code=Code(
+                    str(worksheet.cell(row=row, column=1).value)
+                    if worksheet.cell(row=row, column=1).value else None
+                ),
+                name=Name(
+                    str(worksheet.cell(row=row, column=3).value)
+                    if worksheet.cell(row=row, column=3).value else None
+                ),
+                address=Address(
+                    str(worksheet.cell(row=row, column=2).value)
+                    if worksheet.cell(row=row, column=5).value else None
+                ),
                 indication=Indication(
                     previous=worksheet.cell(row=row, column=6).value,
                     current=worksheet.cell(row=row, column=7).value
@@ -57,7 +66,10 @@ class OpenpyxlProcessor(ExcelProcessor):
                     latitude=worksheet.cell(row=row, column=9).value
                 ),
                 comment=Comment(None),
-                number=Number(worksheet.cell(row=row, column=5).value),
+                number=Number(
+                    str(worksheet.cell(row=row, column=5).value)
+                    if worksheet.cell(row=row, column=5).value else None
+                ),
             )
             for row in range(3, worksheet.max_row + 1)
         ]
