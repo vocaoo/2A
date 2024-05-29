@@ -32,7 +32,6 @@ class GetTasksByUsernameDepartmentHandler(QueryHandler[GetTasksByUsernameDepartm
             department=user.department.to_raw(),
             status=query.status,
         )
-        print(tasks)
 
         logger.info("Get tasks by username and department", extra={
             "username": user.username.to_raw(),
