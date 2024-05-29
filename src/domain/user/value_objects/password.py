@@ -52,7 +52,3 @@ class Password(ValueObject[str]):
             raise TooLongPassword(self.value)
         if MIN_PASSWORD_LENGTH > len(self.value):
             raise TooShortPassword(self.value)
-        if UPPERCASE_PATTERN.match(self.value) is None:
-            raise NoUpperCaseError(self.value)
-        if SYMBOL_PATTERN.match(self.value) is None:
-            raise NoSymbolError(self.value)
