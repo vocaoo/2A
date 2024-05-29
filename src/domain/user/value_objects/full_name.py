@@ -6,7 +6,7 @@ from src.domain.common.value_objects import BaseValueObject
 
 
 MAX_NAME_LENGTH = 32
-NAME_PATTERN = re.compile(r"[A-Za-z]+")
+NAME_PATTERN = re.compile(r"[А-ЯЁа-яё]+")
 
 
 @dataclass(eq=False)
