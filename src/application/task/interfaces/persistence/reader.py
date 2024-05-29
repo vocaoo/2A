@@ -27,3 +27,11 @@ class TaskReader(Protocol):
         status: StatusState,
     ) -> Tasks:
         raise NotImplementedError
+
+    async def get_tasks_by_username_and_department(
+        self,
+        username: str,
+        department: str,
+        status: str,
+    ) -> Tasks:
+        raise NotImplementedError

@@ -27,6 +27,8 @@ from src.main.di import DiScope
 from src.main.mediator import get_mediator
 from src.application.task.interfaces.excel import ExcelProcessor
 from src.infrastructure.excel.main import OpenpyxlProcessor
+from src.application.user.interfaces import IDProvider
+from src.infrastructure.auth import JWTIDProvider, JWTProcessor
 
 
 def init_di_builder() -> DiBuilder:
@@ -49,6 +51,7 @@ def setup_di_builder(di_builder: DiBuilder) -> None:
     setup_aws_factories(di_builder)
     setup_photo_metadata_factories(di_builder)
     setup_excel_factories(di_builder)
+    setup_auth_factories(di_builder)
 
 
 def setup_mediator_factory(
@@ -124,4 +127,13 @@ def setup_excel_factories(di_builder: DiBuilder) -> None:
         bind_by_type(
             Dependent(OpenpyxlProcessor, scope=DiScope.REQUEST), ExcelProcessor, covariant=True
         )
+    )
+
+
+def setup_auth_factories(di_builder: DiBuilder) -> None:
+    di_builder.bind(
+        bind_by_type(Dependent(JWTProcessor, scope=DiScope.REQUEST), JWTProcessor)
+    )
+    di_builder.bind(
+        bind_by_type(Dependent(JWTIDProvider, scope=DiScope.REQUEST), IDProvider)
     )

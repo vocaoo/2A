@@ -6,6 +6,7 @@ from fastapi import FastAPI
 from .di import StateProvider, get_di_builder, get_di_state
 from .mediator import MediatorProvider
 from .stub import Stub
+from src.infrastructure.auth import JWTProcessor
 
 
 def setup_providers(
@@ -20,6 +21,7 @@ def setup_providers(
     app.dependency_overrides[Stub(CommandMediator)] = mediator_provider.build
     app.dependency_overrides[Stub(QueryMediator)] = mediator_provider.build
     app.dependency_overrides[Stub(EventMediator)] = mediator_provider.build
+    app.dependency_overrides[Stub(JWTProcessor)] = mediator_provider.build
 
     state_provider = StateProvider(di_state)
 

@@ -1,8 +1,9 @@
 from collections.abc import Iterable
 from uuid import UUID
 
-from sqlalchemy import func, select
+from sqlalchemy import func, select, literal, or_
 
+from src.application.task.dto import Tasks
 from src.application.task.interfaces.persistence import TaskReader, TaskRepo, GetTaskFilters
 from src.domain.common.const import Empty
 from src.application.common.pagination import Pagination, PaginationResult, SortOrder
@@ -75,6 +76,20 @@ class TaskReaderImpl(SQLAlchemyRepo, TaskReader):
             data=tasks,
             pagination=PaginationResult.from_pagination(pagination, total=tasks_count),
         )
+
+    async def get_tasks_by_username_and_department(
+        self,
+        username: str,
+        department: str,
+        status: str,
+    ) -> Tasks:
+        query = select(Task).filter(or_(
+            Task.implementer == username,
+            Task.code.like(f"{department}%")
+        )).filter(Task.status == status)
+        result: Iterable[Task] = await self._session.scalars(query)
+        tasks = [convert_db_model_to_task_dto(task) for task in result]
+        return tasks
 
     async def _get_tasks_count(self, filters: GetTaskFilters) -> int:
         query = select(func.count(Task.task_id))

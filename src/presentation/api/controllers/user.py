@@ -2,7 +2,7 @@ from typing import Annotated, Union
 from uuid import UUID
 
 from didiator import CommandMediator, Mediator, QueryMediator
-from fastapi import APIRouter, Depends, Query, status
+from fastapi import APIRouter, Depends, Query, status, Response
 
 from src.application.common.pagination.dto import Pagination, SortOrder
 from src.application.user import dto
@@ -17,6 +17,7 @@ from src.application.user.commands import (
     SetPassword,
     DeleteDepartment,
     DeletePhotoURL,
+    LoginCommand,
 )
 from src.application.user.exceptions import UserIdAlreadyExists, UserIdNotExist, UsernameNotExist
 from src.application.user.interfaces.persistence import GetUserFilters
@@ -26,6 +27,7 @@ from src.domain.user.exceptions import UserIsDeleted, UsernameAlreadyExists
 from src.domain.user.value_objects.full_name import EmptyName, TooLongName, WrongNameFormat
 from src.domain.user.value_objects.username import EmptyUsername, TooLongUsername, WrongUsernameFormat
 from src.presentation.api.controllers import requests
+from src.infrastructure.auth import JWTProcessor
 from src.presentation.api.controllers.responses import ErrorResponse
 from src.presentation.api.controllers.responses.base import OkResponse
 from src.presentation.api.providers.stub import Stub
@@ -271,4 +273,21 @@ async def delete_photo_url(
     mediator: Annotated[CommandMediator, Depends(Stub(CommandMediator))],
 ) -> OkResponse[None]:
     await mediator.send(DeletePhotoURL(user_id=user_id))
+    return OkResponse()
+
+
+@user_router.post("/login")
+async def login(
+    command: LoginCommand,
+    mediator: Annotated[CommandMediator, Depends(Stub(CommandMediator))],
+    response: Response,
+) -> OkResponse[None]:
+    token = await mediator.send(command)
+    response.set_cookie(key="token", value=token, httponly=True)
+    return OkResponse()
+
+
+@user_router.post("/logout")
+async def logout(response: Response) -> Response:
+    response.delete_cookie(key="token")
     return OkResponse()

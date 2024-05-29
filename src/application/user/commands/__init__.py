@@ -8,6 +8,7 @@ from .set_password import SetPassword, SetPasswordHandler
 from .set_photo_url import SetPhotoURL, SetPhotoURLHandler
 from .set_role import SetRole, SetRoleHandler
 from .set_username import SetUsername, SetUsernameHandler
+from .login import LoginCommand, LoginHandler
 
 
 __all__ = (
@@ -31,4 +32,6 @@ __all__ = (
     "SetRoleHandler",
     "SetUsername",
     "SetUsernameHandler",
+    "LoginCommand",
+    "LoginHandler",
 )

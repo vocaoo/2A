@@ -18,6 +18,11 @@ endpoint_url = "https://storage.yandexcloud.net"
 region_name = "ru-central1"
 bucket = "2aobjectstorage"
 
+[jwt]
+secret="asdadaodjad"
+algorithm="HS256"
+lifetime_seconds=36000
+
 [logging]
 level = "DEBUG"
 render_json_logs = false

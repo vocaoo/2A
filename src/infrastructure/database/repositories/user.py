@@ -112,6 +112,17 @@ class UserRepoImpl(SQLAlchemyRepo, UserRepo):
         return convert_db_model_to_user_entity(user, existing_usernames)
 
     @exception_mapper
+    async def acquire_user_by_username(self, username: Username) -> User:
+        user: User | None = await self._session.scalar(
+            select(User).where(User.username == username.to_raw())
+        )
+        if user is None:
+            raise UsernameNotExist(username)
+
+        existing_usernames = await self.get_existing_usernames()
+        return convert_db_model_to_user_entity(user, existing_usernames)
+
+    @exception_mapper
     async def add_user(self, user: entities.User) -> None:
         db_user = convert_user_entity_to_db_model(user)
         self._session.add(db_user)

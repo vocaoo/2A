@@ -2,7 +2,7 @@ from typing import Annotated
 from uuid import UUID
 
 from didiator import CommandMediator, Mediator, QueryMediator
-from fastapi import APIRouter, Depends, Query, status, File, UploadFile as FUploadFile
+from fastapi import APIRouter, Depends, Query, status, File, UploadFile as FUploadFile, Request
 from fastapi.responses import FileResponse, Response
 
 from src.application.common.pagination.dto import Pagination, SortOrder
@@ -15,10 +15,16 @@ from src.application.task.commands import (
     DeleteTask,
     RejectTask,
     UploadFile,
-    ClearDatabase
+    ClearDatabase,
 )
 from src.application.task.interfaces.persistence import GetTaskFilters
-from src.application.task.queries import GetTaskByID, GetTaskByCode, GetTasks, GetFile
+from src.application.task.queries import (
+    GetTaskByID,
+    GetTaskByCode,
+    GetTasks,
+    GetFile,
+    GetTasksByUsernameDepartment,
+)
 from src.domain.common.const import Empty
 from src.presentation.api.controllers.responses.base import OkResponse
 from src.presentation.api.providers.stub import Stub
@@ -194,3 +200,14 @@ async def download(
         media_type="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=utf-8",
         headers=headers
     )
+
+
+@task_router.post("/get_by_user")
+async def get_by_user(
+    state: StatusState,
+    mediator: Annotated[QueryMediator, Depends(Stub(QueryMediator))],
+    request: Request,
+) -> OkResponse[None]:
+    token = request.cookies.get("token")
+    result = await mediator.query(GetTasksByUsernameDepartment(token=token, status=state))
+    return OkResponse(result=result)

@@ -11,6 +11,10 @@ class UserRepo(Protocol):
         raise NotImplementedError
 
     @abstractmethod
+    async def acquire_user_by_username(self, username: Username) -> User:
+        raise NotImplementedError
+
+    @abstractmethod
     async def add_user(self, user: User) -> None:
         raise NotImplementedError
 

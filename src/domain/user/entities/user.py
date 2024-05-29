@@ -174,6 +174,10 @@ class User(AggregateRoot):
             )
         )
 
+    def check_password(self, password: Password) -> None:
+        if password != self.password:
+            raise
+
     def _validate_not_deleted(self) -> None:
         if self.deleted_at.is_deleted():
             raise UserIsDeleted(self.user_id.to_raw())

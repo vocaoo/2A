@@ -25,6 +25,7 @@ exifread = "^3.0.0"
 requests = "^2.31.0"
 openpyxl = "^3.1.2"
 python-multipart = "^0.0.9"
+pyjwt = "^2.8.0"
 
 
 [build-system]
