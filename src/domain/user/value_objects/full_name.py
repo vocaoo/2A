@@ -7,6 +7,7 @@ from src.domain.common.value_objects import BaseValueObject
 
 MAX_NAME_LENGTH = 32
 NAME_PATTERN = re.compile(r"[А-ЯЁа-яё]+")
+EN_PATTERN = re.compile(r"[A-Za-z]+")
 
 
 @dataclass(eq=False)
@@ -44,7 +45,7 @@ class FullName(BaseValueObject):
             raise TooLongName(
                 self.first_name, f'Too long first name "{self.first_name}"'
             )
-        if NAME_PATTERN.match(self.first_name) is None:
+        if not (NAME_PATTERN.match(self.first_name) or EN_PATTERN.match(self.first_name)):
             raise WrongNameFormat(
                 self.first_name, f'Wrong first name format "{self.first_name}"'
             )
@@ -54,7 +55,7 @@ class FullName(BaseValueObject):
             raise EmptyName(self.last_name, "Last name can't be empty")
         if len(self.last_name) > MAX_NAME_LENGTH:
             raise TooLongName(self.last_name, f'Too long last name "{self.last_name}"')
-        if NAME_PATTERN.match(self.last_name) is None:
+        if not (NAME_PATTERN.match(self.last_name) or EN_PATTERN.match(self.last_name)):
             raise WrongNameFormat(
                 self.last_name, f'Wrong last name format "{self.last_name}"'
             )
@@ -67,7 +68,7 @@ class FullName(BaseValueObject):
                 raise TooLongName(
                     self.middle_name, f'Too long middle name "{self.middle_name}"'
                 )
-            if NAME_PATTERN.match(self.middle_name) is None:
+            if not (NAME_PATTERN.match(self.last_name) or EN_PATTERN.match(self.last_name)):
                 raise WrongNameFormat(
                     self.middle_name, f'Wrong middle name format "{self.middle_name}"'
                 )
