@@ -27,7 +27,6 @@ from src.domain.user.exceptions import UserIsDeleted, UsernameAlreadyExists
 from src.domain.user.value_objects.full_name import EmptyName, TooLongName, WrongNameFormat
 from src.domain.user.value_objects.username import EmptyUsername, TooLongUsername, WrongUsernameFormat
 from src.presentation.api.controllers import requests
-from src.infrastructure.auth import JWTProcessor
 from src.presentation.api.controllers.responses import ErrorResponse
 from src.presentation.api.controllers.responses.base import OkResponse
 from src.presentation.api.providers.stub import Stub
@@ -281,10 +280,10 @@ async def login(
     command: LoginCommand,
     mediator: Annotated[CommandMediator, Depends(Stub(CommandMediator))],
     response: Response,
-) -> OkResponse[None]:
+) -> str:
     token = await mediator.send(command)
     response.set_cookie(key="token", value=token, httponly=True)
-    return OkResponse()
+    return token
 
 
 @user_router.post("/logout")
